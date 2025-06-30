@@ -1,12 +1,13 @@
 package com.portfolio.service.Impl;
 
 import com.portfolio.dto.ProjectDto;
+import com.portfolio.exception.ProjectNotFoundException;
+import com.portfolio.exception.UserNotFoundException;
 import com.portfolio.model.PersonalInfo;
 import com.portfolio.model.Project;
 import com.portfolio.repository.PersonalInfoRepository;
 import com.portfolio.repository.ProjectRepository;
 import com.portfolio.service.ProjectService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,7 @@ public class ProjectServiceImpl implements ProjectService {
         dto.setTitle(project.getTitle());
         dto.setDescription(project.getDescription());
         dto.setTechStack(project.getTechStack());
+        dto.setGithubRepoUrl(project.getGithubRepoUrl());
         dto.setProjectUrl(project.getProjectUrl());
         dto.setImageUrl(project.getImageUrl());
         return dto;
@@ -37,6 +39,7 @@ public class ProjectServiceImpl implements ProjectService {
     private Project mapToEntity(ProjectDto dto) {
         Project project = new Project();
         project.setId(dto.getId());
+        project.setGithubRepoUrl(dto.getGithubRepoUrl());
         project.setTitle(dto.getTitle());
         project.setDescription(dto.getDescription());
         project.setTechStack(dto.getTechStack());
@@ -53,24 +56,24 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto getProjectById(Long id) {
+    public ProjectDto getProjectById(Long id) throws ProjectNotFoundException {
         return projectRepo.findById(id).map(this::mapToDto)
-                .orElseThrow(() -> new RuntimeException("Project not found"));
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found with id :"+id));
     }
 
     @Override
-    public ProjectDto createProject(Long personalInfoId, ProjectDto dto) {
+    public ProjectDto createProject(Long personalInfoId, ProjectDto dto) throws UserNotFoundException {
         PersonalInfo personalInfo = personalRepo.findById(personalInfoId)
-                .orElseThrow(() -> new RuntimeException("PersonalInfo not found"));
+                .orElseThrow(() -> new UserNotFoundException("Personal information not found for id : "+personalInfoId));
         Project project = mapToEntity(dto);
         project.setPersonalInfo(personalInfo);
         return mapToDto(projectRepo.save(project));
     }
 
     @Override
-    public ProjectDto updateProject(Long id, ProjectDto dto) {
+    public ProjectDto updateProject(Long id, ProjectDto dto) throws ProjectNotFoundException {
         Project existing = projectRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Project not found"));
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found with id : "+id));
         existing.setTitle(dto.getTitle());
         existing.setDescription(dto.getDescription());
         existing.setTechStack(dto.getTechStack());
@@ -80,7 +83,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void deleteProject(Long id) {
+    public boolean deleteProject(Long id) throws ProjectNotFoundException {
+        if (!projectRepo.existsById(id)) {
+            throw new ProjectNotFoundException("Project not found with ID: " + id);
+        }
         projectRepo.deleteById(id);
+        return true;
     }
 }

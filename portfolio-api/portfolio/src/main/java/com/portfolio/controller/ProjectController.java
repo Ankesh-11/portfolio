@@ -1,8 +1,11 @@
 package com.portfolio.controller;
 
 import com.portfolio.dto.ProjectDto;
+import com.portfolio.exception.ProjectNotFoundException;
+import com.portfolio.exception.UserNotFoundException;
 import com.portfolio.service.ProjectService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -23,22 +26,23 @@ public class ProjectController {
     }
 
     @GetMapping("/project/{id}")
-    public ProjectDto getProject(@PathVariable Long id) {
+    public ProjectDto getProject(@PathVariable Long id) throws ProjectNotFoundException {
         return service.getProjectById(id);
     }
 
     @PostMapping("/{personalInfoId}")
-    public ProjectDto createProject(@PathVariable Long personalInfoId, @RequestBody ProjectDto dto) {
+    public ProjectDto createProject(@PathVariable Long personalInfoId, @RequestBody ProjectDto dto) throws UserNotFoundException {
         return service.createProject(personalInfoId, dto);
     }
 
     @PutMapping("/{id}")
-    public ProjectDto updateProject(@PathVariable Long id, @RequestBody ProjectDto dto) {
+    public ProjectDto updateProject(@PathVariable Long id, @RequestBody ProjectDto dto) throws ProjectNotFoundException {
         return service.updateProject(id, dto);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProject(@PathVariable Long id) {
+    public ResponseEntity<String> deleteProject(@PathVariable Long id) throws ProjectNotFoundException {
         service.deleteProject(id);
+        return new ResponseEntity<>("Project successfully deleted with id : "+id, HttpStatus.OK);
     }
 }

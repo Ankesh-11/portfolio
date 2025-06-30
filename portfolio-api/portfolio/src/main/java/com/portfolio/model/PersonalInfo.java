@@ -1,128 +1,63 @@
 package com.portfolio.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
-@Data
+@Table(name = "personal_info") // Added for clarity, defaults to class name
+@Data // Includes @Getter, @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 public class PersonalInfo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    private int version;
+
+    @NotBlank
     private String fullName;
+
+    @NotBlank
     private String title;
+
+    @NotBlank
+    @Column(length = 10000)
     private String aboutMe;
+
+    @Email
     private String email;
+
     private String phone;
+
     private String profileImageUrl;
+
     private String resumeUrl;
+
+    @NotBlank
+    @Column(length = 100000)
     private String bio;
+
     private String location;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ElementCollection
+    private List<String> skills;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "social_media_links_id")
     private SocialMediaLinks socialMediaLinks;
 
     @OneToMany(mappedBy = "personalInfo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Project> projects;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAboutMe() {
-        return aboutMe;
-    }
-
-    public void setAboutMe(String aboutMe) {
-        this.aboutMe = aboutMe;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getProfileImageUrl() {
-        return profileImageUrl;
-    }
-
-    public void setProfileImageUrl(String profileImageUrl) {
-        this.profileImageUrl = profileImageUrl;
-    }
-
-    public String getResumeUrl() {
-        return resumeUrl;
-    }
-
-    public void setResumeUrl(String resumeUrl) {
-        this.resumeUrl = resumeUrl;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public SocialMediaLinks getSocialMediaLinks() {
-        return socialMediaLinks;
-    }
-
-    public void setSocialMediaLinks(SocialMediaLinks socialMediaLinks) {
-        this.socialMediaLinks = socialMediaLinks;
-    }
-
-    public List<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
-    }
 }
