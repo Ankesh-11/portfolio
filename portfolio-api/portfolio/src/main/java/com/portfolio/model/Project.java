@@ -1,7 +1,6 @@
 package com.portfolio.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,13 +8,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "project") // Added for clarity
+@Table(name = "project")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Project {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,9 +22,13 @@ public class Project {
     private int version;
 
     private String title;
+
     @Lob
     private String description;
+
+    @Lob
     private String techStack;
+
     private String projectUrl;
     private String githubRepoUrl;
     private String imageUrl;
@@ -35,5 +37,4 @@ public class Project {
     @JsonBackReference
     @JoinColumn(name = "personal_info_id")
     private PersonalInfo personalInfo;
-
 }

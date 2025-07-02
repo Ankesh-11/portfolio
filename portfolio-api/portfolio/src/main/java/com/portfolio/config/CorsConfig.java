@@ -1,17 +1,16 @@
-package com.portfolio.controller;// In your Spring Boot application, e.g., in a config package
-// com.portfolio.config.WebConfig.java
+package com.portfolio.config;// In your Spring Boot application, e.g., in a config packagea
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class CorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:8080", "http://127.0.0.1:5500") // <--- Add ALL origins your frontend might run on
+        registry.addMapping("/**") //
+                .allowedOrigins("http://127.0.0.1:5500/")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);

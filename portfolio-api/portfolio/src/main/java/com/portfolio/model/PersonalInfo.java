@@ -1,20 +1,20 @@
 package com.portfolio.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
-@Table(name = "personal_info") // Added for clarity, defaults to class name
-@Data // Includes @Getter, @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor
+@Table(name = "personal_info")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PersonalInfo {
 
     @Id
@@ -30,21 +30,18 @@ public class PersonalInfo {
     @NotBlank
     private String title;
 
-    @NotBlank
-    @Column(length = 10000)
+    @Lob
     private String aboutMe;
 
     @Email
     private String email;
 
     private String phone;
-
+    private Integer totalExperience;
     private String profileImageUrl;
-
     private String resumeUrl;
 
-    @NotBlank
-    @Column(length = 100000)
+    @Lob
     private String bio;
 
     private String location;
@@ -60,4 +57,8 @@ public class PersonalInfo {
     @JsonManagedReference
     private List<Project> projects;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true)
+    @JsonIgnore
+    private User user;
 }

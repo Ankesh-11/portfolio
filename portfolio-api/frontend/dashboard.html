@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - Portfolio</title>
+  <link rel="stylesheet" href="admin-style.css" />
+  <script defer src="dashboard.js"></script>
+</head>
+
+<body>
+  <header class="main-header">
+    <h1>Admin Dashboard</h1>
+    <button onclick="logout()">Logout</button>
+  </header>
+
+  <div class="container">
+    <!-- About Me Section -->
+    <section id="about">
+      <h2>About Me <button onclick="openEditModal()">Edit</button></h2>
+      <p><strong>Full Name:</strong> <span id="fullName"></span></p>
+      <p><strong>Title:</strong> <span id="title"></span></p>
+      <p><strong>About Me:</strong> <span id="aboutMe"></span></p>
+      <p><strong>Email:</strong> <span id="email"></span></p>
+      <p><strong>Phone:</strong> <span id="phone"></span></p>
+      <p><strong>Location:</strong> <span id="location"></span></p>
+      <p><strong>Bio:</strong> <span id="bio"></span></p>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+      <h2>Skills <button onclick="editSkills()">Edit</button></h2>
+      <ul id="techSkills"></ul>
+      <textarea id="skillsInput" style="display:none;"></textarea>
+      <button onclick="saveSkills()" style="display:none;">Save</button>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+      <h2>Projects <button onclick="openNewProjectModal()">Add Project</button></h2>
+      <div id="projectList"></div>
+    </section>
+  </div>
+
+  <!-- Edit About Modal -->
+  <div id="editModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeEditModal()">&times;</span>
+      <h3>Edit Profile</h3>
+      <input id="editFullName" placeholder="Full Name" />
+      <input id="editTitle" placeholder="Title" />
+      <textarea id="editAboutMe" placeholder="About Me" style="user-select: auto;width: 420px;height: 41px;border-radius: 5px;"></textarea>
+      <input id="editEmail" placeholder="Email" />
+      <input id="editPhone" placeholder="Phone" />
+      <input id="editLocation" placeholder="Location" />
+      <textarea id="editBio" placeholder="Bio" style="user-select: auto; width: 420px; height: 104px; border-radius: 5px;"></textarea>
+      <button onclick="saveSection()" style="user-select: auto;width: 420px;height: 41px;">Save</button>
+    </div>
+  </div>
+
+  <!-- Project Modal -->
+  <div id="projectModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeProjectModal()">&times;</span>
+      <h3 id="projectModalTitle">Add/Edit Project</h3>
+      <input id="projTitle" placeholder="Project Title" />
+      <textarea id="projDesc" placeholder="Description" style="user-select: auto;width: 420px;height: 41px;border-radius: 5px;"></textarea>
+      <input id="projStack" placeholder="Tech Stack" />
+      <input id="projUrl" placeholder="Project URL" />
+      <input id="projGithub" placeholder="GitHub URL" />
+      <input id="projImage" placeholder="Image URL" />
+      <input type="hidden" id="editingProjectId" />
+      <button onclick="submitProject()">Save</button>
+    </div>
+  </div>
+
+  <div class="social" id="socialLinks"></div>
+
+<div class="services" id="services">
+  <h2>Services</h2>
+  <div id="serviceList"></div>
+</div>
+
+</body>
+
+</html>
